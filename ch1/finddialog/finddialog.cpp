@@ -1,20 +1,21 @@
-#include <QtGui>
-#include <QLayout>
+#include "finddialog.h"
 
-#include "find.h"
+#include <QtWidgets>
 
-FindDialog::FindDialog(QWidget *parent) : QDialog(parent) {
-    label = new QLabel(tr("Find &what:"));
+finddialog::finddialog(QWidget *parent)
+    : QDialog(parent) {
+
+    label = new QLabel(tr("Find &What:"));
     lineEdit = new QLineEdit;
     label->setBuddy(lineEdit);
-
-    caseCheckBox = new QCheckBox(tr("Match Case"));
-    backwardCheckBox = new QCheckBox(tr("Search &Backward"));
 
     findButton = new QPushButton(tr("&Find"));
     findButton->setDefault(true);
     findButton->setEnabled(false);
-    closeButton = new QPushButton(tr("&Close"));
+    closeButton = new QPushButton(tr("Close"));
+
+    backwardCheckBox = new QCheckBox(tr("&Backward Search"));
+    caseCheckBox = new QCheckBox(tr("Match &case"));
 
     connect(lineEdit, SIGNAL(textChanged(const QString &)),
             this, SLOT(enableFindButton(const QString &)));
@@ -32,9 +33,9 @@ FindDialog::FindDialog(QWidget *parent) : QDialog(parent) {
     leftLayout->addWidget(caseCheckBox);
     leftLayout->addWidget(backwardCheckBox);
 
-    QVBoxLayout *rightLayout = new QVBoxLayout;
+    QVBoxLayout *rightLayout = new  QVBoxLayout;
     rightLayout->addWidget(findButton);
-    rightLayout->addWidget(close);
+    rightLayout->addWidget(closeButton);
     rightLayout->addStretch();
 
     QHBoxLayout *mainLayout = new QHBoxLayout;
@@ -44,21 +45,24 @@ FindDialog::FindDialog(QWidget *parent) : QDialog(parent) {
 
     setWindowTitle(tr("Find"));
     setFixedHeight(sizeHint().height());
+
 }
 
-void FindDialog::findClicked() {
-    QString text = lineEdit->text();
-    Qt::CaseSensitivity cs = 
-        caseCheckBox->isChecked() ? Qt::CaseSensitive :
-                                    Qt::CaseInsensitive;
+finddialog::~finddialog()
+{
+}
 
+void finddialog::findClicked() {
+    QString text = lineEdit->text();
+    Qt::CaseSensitivity cs = caseCheckBox->isEnabled() ? Qt::CaseSensitive :
+                                                         Qt::CaseInsensitive;
     if (backwardCheckBox->isChecked()) {
-        findPrevious(text, cs);
+        emit findPrevious(text, cs);
     } else {
-        findNext(text, cs);
+        emit findNext(text, cs);
     }
 }
 
-void FindDialog::enableFindButton() {
+void finddialog::enableFindButton(const QString &text) {
     findButton->setEnabled(!text.isEmpty());
 }
