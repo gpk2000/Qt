@@ -52,11 +52,8 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = gotocelldialog.cpp \
-		main.cpp moc_gotocelldialog.cpp
-OBJECTS       = gotocelldialog.o \
-		main.o \
-		moc_gotocelldialog.o
+SOURCES       = main.cpp 
+OBJECTS       = main.o
 DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/common/unix.conf \
 		/usr/lib/qt/mkspecs/common/linux.conf \
@@ -201,9 +198,7 @@ DIST          = /usr/lib/qt/mkspecs/features/spec_pre.prf \
 		/usr/lib/qt/mkspecs/features/exceptions.prf \
 		/usr/lib/qt/mkspecs/features/yacc.prf \
 		/usr/lib/qt/mkspecs/features/lex.prf \
-		goto.pro gotocelldialog.h \
-		ui_gotocelldialog.h gotocelldialog.cpp \
-		main.cpp
+		goto.pro  main.cpp
 QMAKE_TARGET  = goto
 DESTDIR       = 
 TARGET        = goto
@@ -521,8 +516,7 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/qt/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents gotocelldialog.h ui_gotocelldialog.h $(DISTDIR)/
-	$(COPY_FILE) --parents gotocelldialog.cpp main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents gotocelldialog.ui $(DISTDIR)/
 
 
@@ -555,15 +549,8 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/qt/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/qt/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_gotocelldialog.cpp
+compiler_moc_header_make_all:
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_gotocelldialog.cpp
-moc_gotocelldialog.cpp: gotocelldialog.h \
-		ui_gotocelldialog.h \
-		moc_predefs.h \
-		/usr/bin/moc
-	/usr/bin/moc $(DEFINES) --include /home/zenitsu/Qt/ch1/goto/moc_predefs.h -I/usr/lib/qt/mkspecs/linux-g++ -I/home/zenitsu/Qt/ch1/goto -I/home/zenitsu/Qt/ch1/goto -I/usr/include/qt -I/usr/include/qt/QtWidgets -I/usr/include/qt/QtGui -I/usr/include/qt/QtCore -I/usr/include/c++/10.2.0 -I/usr/include/c++/10.2.0/x86_64-pc-linux-gnu -I/usr/include/c++/10.2.0/backward -I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include -I/usr/local/include -I/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed -I/usr/include gotocelldialog.h -o moc_gotocelldialog.cpp
-
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -581,20 +568,13 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_uic_clean 
 
 ####### Compile
-
-gotocelldialog.o: gotocelldialog.cpp gotocelldialog.h \
-		ui_gotocelldialog.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o gotocelldialog.o gotocelldialog.cpp
 
 main.o: main.cpp gotocelldialog.h \
 		ui_gotocelldialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
-
-moc_gotocelldialog.o: moc_gotocelldialog.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_gotocelldialog.o moc_gotocelldialog.cpp
 
 ####### Install
 
